@@ -73,7 +73,7 @@ st.header('Please upload a Zebrafish larvae image')
 file = st.file_uploader('', type=['jpeg', 'jpg', 'png'])
 
 # load classifier
-model = keras.models.load_model('ResNet_BestSoFar.h5', compile=False)
+model = tf.keras.models.load_model('ResNet_BestSoFar.h5', compile=False)
 
 # display image
 if file is not None:
