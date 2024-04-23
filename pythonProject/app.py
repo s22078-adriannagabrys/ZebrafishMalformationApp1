@@ -3,7 +3,6 @@ import streamlit as st
 from PIL import ImageOps, Image
 import numpy as np
 import pandas as pd
-
 import tensorflow as tf
 
 class_names = ["Curved spine", "Dead", "Edema", "Normal", "Unhatched", "Yolk deformation"]
@@ -74,7 +73,7 @@ st.header('Please upload a Zebrafish larvae image')
 file = st.file_uploader('', type=['jpeg', 'jpg', 'png'])
 
 # load classifier
-model = tf.keras.models.load_model('ResNet_BestSoFar.h5', compile=False)
+model = keras.models.load_model('ResNet_BestSoFar.h5', compile=False)
 
 # display image
 if file is not None:
