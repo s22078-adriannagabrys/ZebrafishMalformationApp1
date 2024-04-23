@@ -90,6 +90,7 @@ if file is not None:
     sorted_class_names = [class_names[i] for i in sorted_indices]
     sorted_pred = [pred[0][i] for i in sorted_indices]
 
+
     # Create a DataFrame to hold the sorted data
     data = {"Class Name": sorted_class_names, "Prediction (%)": [f"{p * 100:.2f}%" for p in sorted_pred]}
     df = pd.DataFrame(data)
