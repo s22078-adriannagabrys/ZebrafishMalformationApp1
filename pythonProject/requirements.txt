@@ -2,5 +2,4 @@ pandas
 numpy
 tensorflow==2.15.0
 streamlit
-PIL==8.0.0
 base64
