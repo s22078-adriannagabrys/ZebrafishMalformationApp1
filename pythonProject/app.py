@@ -4,8 +4,6 @@ from PIL import ImageOps, Image
 import numpy as np
 import pandas as pd
 
-import keras
-
 class_names = ["Curved spine", "Dead", "Edema", "Normal", "Unhatched", "Yolk deformation"]
 
 def set_background(image_file):
