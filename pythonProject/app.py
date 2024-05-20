@@ -39,18 +39,8 @@ def classify(image, model, class_names):
         # make prediction
         pred = model.predict(data)
 
-        # Get the feature map
-        last_conv_layer = model.get_layer('conv5_block3_out')
-        grad_model = tf.keras.models.Model([model.inputs], [last_conv_layer.output, model.output])
+        return pred
 
-        with tf.GradientTape() as tape:
-            conv_outputs, predictions = grad_model(data)
-            loss = predictions[:, np.argmax(predictions[0])]
-
-        grads = tape.gradient(loss, conv_outputs)[0]
-        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
-
-        return class_names[np.argmax(pred)], np.max(pred), conv_outputs, pooled_grads
     except Exception as e:
         st.error(f"Error during classification: {e}")
         return None, None, None, None
