@@ -60,6 +60,8 @@ def classify(image, model, class_names):
     # make prediction
     pred = model.predict(data)
 
+    st.write(pred)
+
     return pred
 
 
