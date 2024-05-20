@@ -31,57 +31,53 @@ def classify(image, model, class_names):
         # Clear Keras session to free up resources
         tf.keras.backend.clear_session()
 
-        # convert image to (224, 224)
+        # Convert image to (224, 224)
         image = ImageOps.fit(image, (224, 224), Image.Resampling.LANCZOS)
 
-        # convert image to numpy array
+        # Convert image to numpy array
         image_array = np.asarray(image)
 
-        # normalize image
+        # Normalize image
         normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
 
-        # set model input
+        # Set model input
         data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
         data[0] = normalized_image_array
 
-        # make prediction
+        # Make prediction
         pred = model.predict(data)
-        
+
         # Ensure the prediction is a numpy array
         pred = np.array(pred)
-        
+
         return pred
 
     except Exception as e:
         st.error(f"Error during classification: {e}")
         return None
 
-# Set TensorFlow config
-tf.config.threading.set_inter_op_parallelism_threads(1)
-tf.config.threading.set_intra_op_parallelism_threads(1)
-
-# set title
+# Set title
 st.title('Zebrafish Malformations Classification')
 
-# set header
+# Set header
 st.header('Please upload a Zebrafish larvae image')
 
-# upload file
+# Upload file
 file = st.file_uploader('', type=['jpeg', 'jpg', 'png'])
 
-# load classifier
+# Load classifier
 try:
     model = tf.keras.models.load_model("pythonProject/ResNet_BestSoFar.h5", compile=False)
 except Exception as e:
     st.error(f"Error loading model: {e}")
     model = None
 
-# display image
+# Display image
 if file is not None and model is not None:
     image = Image.open(file).convert('RGB')
     st.image(image, use_column_width=True)
 
-    # classify image
+    # Classify image
     pred = classify(image, model, class_names)
 
     if pred is not None and len(pred) > 0:
