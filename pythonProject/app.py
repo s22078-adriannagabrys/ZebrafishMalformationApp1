@@ -5,6 +5,10 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import os
+
+# Reduce TensorFlow logging
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 class_names = ["Curved spine", "Dead", "Edema", "Normal", "Unhatched", "Yolk deformation"]
 
@@ -24,6 +28,9 @@ def set_background(image_file):
 
 def classify(image, model, class_names):
     try:
+        # Clear Keras session to free up resources
+        tf.keras.backend.clear_session()
+
         # convert image to (224, 224)
         image = ImageOps.fit(image, (224, 224), Image.Resampling.LANCZOS)
 
@@ -48,6 +55,10 @@ def classify(image, model, class_names):
     except Exception as e:
         st.error(f"Error during classification: {e}")
         return None
+
+# Set TensorFlow config
+tf.config.threading.set_inter_op_parallelism_threads(1)
+tf.config.threading.set_intra_op_parallelism_threads(1)
 
 # set title
 st.title('Zebrafish Malformations Classification')
