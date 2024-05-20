@@ -3,3 +3,4 @@ numpy
 tensorflow==2.15.0
 streamlit
 matplotlib
+matplotlib.cm
