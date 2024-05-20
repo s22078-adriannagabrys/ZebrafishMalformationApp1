@@ -70,7 +70,7 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_indices):
         heatmaps.append(heatmap.numpy())
     return heatmaps
 
-def save_and_display_gradcam(img_path, heatmaps, pred_indices, cam_path_prefix="cam", alpha=0.3):
+def save_and_display_gradcam(img_path, heatmaps, pred_indices, alpha=0.3):
     img = Image.open(img_path).convert('RGB')
     img = np.asarray(img)
     for i, heatmap in enumerate(heatmaps):
@@ -83,8 +83,6 @@ def save_and_display_gradcam(img_path, heatmaps, pred_indices, cam_path_prefix="
         jet_heatmap = np.asarray(jet_heatmap)
         superimposed_img = jet_heatmap * alpha + img
         superimposed_img = Image.fromarray(np.uint8(superimposed_img))
-        cam_path = f"{cam_path_prefix}_{class_names[pred_indices[i]]}.jpg"
-        superimposed_img.save(cam_path)
         st.image(superimposed_img, caption=f"Grad-CAM for {class_names[pred_indices[i]]}", use_column_width=True)
 
 # Set title
