@@ -2,6 +2,7 @@ import base64
 import streamlit as st
 from PIL import ImageOps, Image
 import numpy as np
+import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
@@ -38,12 +39,15 @@ def classify(image, model, class_names):
 
         # make prediction
         pred = model.predict(data)
-
+        
+        # Ensure the prediction is a numpy array
+        pred = np.array(pred)
+        
         return pred
 
     except Exception as e:
         st.error(f"Error during classification: {e}")
-        return None, None, None, None
+        return None
 
 # set title
 st.title('Zebrafish Malformations Classification')
@@ -69,25 +73,25 @@ if file is not None and model is not None:
     # classify image
     pred = classify(image, model, class_names)
 
-    pred = np.array(pred)
+    if pred is not None and len(pred) > 0:
+        sorted_indices = np.argsort(pred[0])[::-1]  # Sort indices in descending order based on pred[0]
 
-    sorted_indices = np.argsort(pred[0])[::-1]  # Sort indices in descending order based on pred[0]
+        sorted_class_names = [class_names[i] for i in sorted_indices]
+        sorted_pred = [pred[0][i] for i in sorted_indices]
 
-    sorted_class_names = [class_names[i] for i in sorted_indices]
-    sorted_pred = [pred[0][i] for i in sorted_indices]
+        filtered_data = {"Class Name": [], "Prediction (%)": []}
+        for class_name, prediction in zip(sorted_class_names, sorted_pred):
+            if prediction > 0.5:
+                filtered_data["Class Name"].append(class_name)
+                filtered_data["Prediction (%)"].append(f"{prediction * 100:.2f}%")
 
-    filtered_data = {"Class Name": [], "Prediction (%)": []}
-    for class_name, prediction in zip(sorted_class_names, sorted_pred):
-        if prediction > 0.5:
-            filtered_data["Class Name"].append(class_name)
-            filtered_data["Prediction (%)"].append(f"{prediction * 100:.2f}%")
-    
-    # Create a DataFrame to hold the filtered data
-    filtered_df = pd.DataFrame(filtered_data)
-    
-    # Display the filtered DataFrame as a table with invisible borders
-    st.write(filtered_df)
+        # Create a DataFrame to hold the filtered data
+        filtered_df = pd.DataFrame(filtered_data)
 
+        # Display the filtered DataFrame as a table with invisible borders
+        st.write(filtered_df)
+    else:
+        st.error("Failed to classify the image.")
 else:
     if model is None:
         st.error("Model is not loaded.")
