@@ -44,6 +44,7 @@ def classify(image, model, class_names):
     Returns:
         A tuple of the predicted class name and the confidence score for that prediction.
     """
+    f.keras.backend.clear_session()
     # convert image to (224, 224)
     image = ImageOps.fit(image, (224, 224), Image.Resampling.LANCZOS)
 
