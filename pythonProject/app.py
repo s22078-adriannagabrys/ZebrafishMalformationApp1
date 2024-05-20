@@ -42,7 +42,7 @@ def classify(image, model, class_names):
         class_names (list): A list of class names corresponding to the classes that the model can predict.
 
     Returns:
-        A tuple of the predicted class name and the confidence score for that prediction.
+        A tuple of the predicted class name, the confidence score for that prediction, and the feature map.
     """
     # convert image to (224, 224)
     image = ImageOps.fit(image, (224, 224), Image.Resampling.LANCZOS)
@@ -60,7 +60,18 @@ def classify(image, model, class_names):
     # make prediction
     pred = model.predict(data)
 
-    return pred
+    # Get the feature map
+    last_conv_layer = model.get_layer('conv5_block3_out')
+    grad_model = tf.keras.models.Model([model.inputs], [last_conv_layer.output, model.output])
+
+    with tf.GradientTape() as tape:
+        conv_outputs, predictions = grad_model(data)
+        loss = predictions[:, np.argmax(predictions[0])]
+    
+    grads = tape.gradient(loss, conv_outputs)[0]
+    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+
+    return class_names[np.argmax(pred)], np.max(pred), conv_outputs, pooled_grads
 
 
 # set title
@@ -81,23 +92,18 @@ if file is not None:
     st.image(image, use_column_width=True)
 
     # classify image
-    pred = classify(image, model, class_names)
+    predicted_class, confidence, conv_outputs, pooled_grads = classify(image, model, class_names)
 
-    pred = np.array(pred)
+    st.write(f"Predicted class: {predicted_class}")
+    st.write(f"Confidence: {confidence}")
 
-    sorted_indices = np.argsort(pred[0])[::-1]  # Sort indices in descending order based on pred[0]
+    # Grad-CAM
+    heatmap = tf.reduce_mean(tf.multiply(pooled_grads, conv_outputs), axis=-1)
+    heatmap = np.maximum(heatmap, 0)
+    heatmap /= np.max(heatmap)
 
-    sorted_class_names = [class_names[i] for i in sorted_indices]
-    sorted_pred = [pred[0][i] for i in sorted_indices]
+    plt.imshow(heatmap[0])
+    plt.axis('off')
+    st.pyplot()
 
-    filtered_data = {"Class Name": [], "Prediction (%)": []}
-    for class_name, prediction in zip(sorted_class_names, sorted_pred):
-        if prediction > 0.5:
-            filtered_data["Class Name"].append(class_name)
-            filtered_data["Prediction (%)"].append(f"{prediction * 100:.2f}%")
-    
-    # Create a DataFrame to hold the filtered data
-    filtered_df = pd.DataFrame(filtered_data)
-    
-    # Display the filtered DataFrame as a table with invisible borders
-    st.write(filtered_df)
+    # You can further process the heatmap for visualization if needed
