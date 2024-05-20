@@ -90,7 +90,7 @@ if file is not None:
     sorted_pred = [pred[0][i] for i in sorted_indices]
 
     st.write("### Prediction Results:")
-        for class_name, prediction in zip(sorted_class_names, sorted_pred):
-            if prediction > 0.5:
-                st.write(f"**{class_name}:** {prediction * 100:.2f}%")
+    for class_name, prediction in zip(sorted_class_names, sorted_pred):
+        if prediction > 0.5:
+            st.write(f"**{class_name}:** {prediction * 100:.2f}%")
 
