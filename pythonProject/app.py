@@ -69,12 +69,8 @@ st.header('Please upload a Zebrafish larvae image')
 # Upload file
 file = st.file_uploader('', type=['jpeg', 'jpg', 'png'])
 
-# Load classifier
-try:
-    model = tf.keras.models.load_model("pythonProject/ResNet_BestSoFar.h5", compile=False)
-except Exception as e:
-    st.error(f"Error loading model: {e}")
-    model = None
+
+model = tf.keras.models.load_model("pythonProject/ResNet_BestSoFar.h5", compile=False)
 
 # Display image and classify if a file is uploaded and model is loaded
 if file is not None and model is not None:
