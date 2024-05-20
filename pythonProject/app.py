@@ -90,10 +90,14 @@ if file is not None:
     sorted_class_names = [class_names[i] for i in sorted_indices]
     sorted_pred = [pred[0][i] for i in sorted_indices]
 
-
-    # Create a DataFrame to hold the sorted data
-    data = {"Class Name": sorted_class_names, "Prediction (%)": [f"{p * 100:.2f}%" for p in sorted_pred]}
-    df = pd.DataFrame(data)
-
-    # Display the DataFrame as a table with invisible borders
-    st.write(df)
+    filtered_data = {"Class Name": [], "Prediction (%)": []}
+    for class_name, prediction in zip(sorted_class_names, sorted_pred):
+        if prediction > 0.5:
+            filtered_data["Class Name"].append(class_name)
+            filtered_data["Prediction (%)"].append(f"{prediction * 100:.2f}%")
+    
+    # Create a DataFrame to hold the filtered data
+    filtered_df = pd.DataFrame(filtered_data)
+    
+    # Display the filtered DataFrame as a table with invisible borders
+    st.write(filtered_df)
