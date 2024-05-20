@@ -4,6 +4,7 @@ from PIL import ImageOps, Image
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 class_names = ["Curved spine", "Dead", "Edema", "Normal", "Unhatched", "Yolk deformation"]
 
