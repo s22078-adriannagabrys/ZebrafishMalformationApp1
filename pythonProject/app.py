@@ -31,7 +31,6 @@ def set_background(image_file):
     """
     st.markdown(style, unsafe_allow_html=True)
 
-
 def classify(image, model, class_names):
     """
     This function takes an image, a model, and a list of class names and returns the predicted class and confidence
@@ -76,7 +75,7 @@ def classify(image, model, class_names):
 
 
 # set title
-st.title('Zebrafish malformations classification')
+st.title('Zebrafish Malformations Classification')
 
 # set header
 st.header('Please upload a Zebrafish larvae image')
@@ -102,9 +101,19 @@ if file is not None:
     heatmap = tf.reduce_mean(tf.multiply(pooled_grads, conv_outputs), axis=-1)
     heatmap = np.maximum(heatmap, 0)
     heatmap /= np.max(heatmap)
+    heatmap = heatmap[0]
 
-    plt.imshow(heatmap[0])
-    plt.axis('off')
-    st.pyplot()
+    # Resize heatmap to image size
+    heatmap = np.uint8(255 * heatmap)
+    heatmap = Image.fromarray(heatmap).resize((image.width, image.height))
 
-    # You can further process the heatmap for visualization if needed
+    # Apply heatmap to image
+    heatmap = np.array(heatmap)
+    image_array = np.array(image)
+    superimposed_img = heatmap * 0.4 + image_array
+
+    # Display Grad-CAM
+    fig, ax = plt.subplots()
+    ax.imshow(superimposed_img)
+    ax.axis('off')
+    st.pyplot(fig)
