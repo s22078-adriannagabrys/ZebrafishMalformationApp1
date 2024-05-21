@@ -105,6 +105,7 @@ if file is not None:
     # Classify image
     pred, img_array = classify(image, model, class_names)
     pred = np.array(pred)
+    st.write(pred)
     sorted_indices = np.argsort(pred[0])[::-1]  # Sort indices in descending order based on pred[0]
     sorted_class_names = [class_names[i] for i in sorted_indices]
     sorted_pred = [pred[0][i] for i in sorted_indices]
