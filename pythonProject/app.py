@@ -3,6 +3,7 @@ import streamlit as st
 from PIL import ImageOps, Image
 import numpy as np
 import tensorflow as tf
+import keras
 from matplotlib import cm
 
 # Define class names
@@ -95,7 +96,8 @@ st.header('Please upload a Zebrafish larvae image')
 file = st.file_uploader('', type=['jpeg', 'jpg', 'png'])
 
 # Load classifier
-model = tf.keras.models.load_model("pythonProject/ResNet_BestSoFar.h5", compile=False)
+model = tf.keras.models.load_model("pythonProject/ResNet_FT_BestSoFar.h5", compile=False)
+modelInception = tf.keras.models.load_model("pythonProject/Inception_FT_BestSoFar2.h5", compile=False)
 
 # Display image and classify
 if file is not None:
