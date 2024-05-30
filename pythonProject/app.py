@@ -82,7 +82,7 @@ def main():
                     try:
                         # Load classifiers
                         st.write("Loading ResNet model...")
-                        modelResNet = tf.keras.models.load_model("pythonProject/ResNet_FT_BestSoFar.h5", compile=False)
+                        modelResNet = tf.keras.models.load_model("pythonProject/ResNet_BestSoFar.h5", compile=False)
                         st.write("ResNet model loaded successfully.")
     
                         #st.write("Loading Inception model...")
