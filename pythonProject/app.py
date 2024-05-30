@@ -85,9 +85,9 @@ def main():
                         modelResNet = tf.keras.models.load_model("pythonProject/ResNet_FT_BestSoFar.h5", compile=False)
                         st.write("ResNet model loaded successfully.")
     
-                        st.write("Loading Inception model...")
-                        modelInception = tf.keras.models.load_model("pythonProject/Inception_FT_BestSoFar2.h5", compile=False)
-                        st.write("Inception model loaded successfully.")
+                        #st.write("Loading Inception model...")
+                        #modelInception = tf.keras.models.load_model("pythonProject/Inception_FT_BestSoFar2.h5", compile=False)
+                        #st.write("Inception model loaded successfully.")
                     except OSError as e:
                         st.error(f"Error loading model: {e}")
                         return
