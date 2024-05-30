@@ -40,7 +40,7 @@ def display_predictions(pred, model_name):
     for class_name, prediction in zip(sorted_class_names, sorted_pred):
         if prediction > 0.5:
             cols = st.columns(2)
-            cols[0].write(f"{class_name}:")
+            cols[0].write(f"{class_name}")
             cols[1].write(f"{prediction * 100:.2f}%")
 
 def main():
@@ -67,9 +67,6 @@ def main():
         # Upload file with a label
         file = st.file_uploader('Wgraj zdjęcie larwy Danio rerio', type=['jpeg', 'jpg', 'png'])
 
-        # Load classifiers
-
-
         # Display image and classify
         if file is not None:
             image = Image.open(file).convert('RGB')
@@ -79,10 +76,10 @@ def main():
             with prediction:
                 if st.button("Klasyfikuj"):
                     st.divider()
+
                     # Load classifiers
                     modelResNet = tf.keras.models.load_model("pythonProject/ResNet_FT_BestSoFar.h5", compile=False)
                     modelInception = tf.keras.models.load_model("pythonProject/Inception_FT_BestSoFar2.h5", compile=False)
-
                     cols = st.columns(2)  # Add a small column in between for the vertical line
 
                     with cols[0]:
