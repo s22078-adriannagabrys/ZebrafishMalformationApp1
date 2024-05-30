@@ -71,11 +71,11 @@ def main():
         resnet_model_path = "pythonProject/ResNet_FT_BestSoFar.h5"
         inception_model_path = "pythonProject/Inception_FT_BestSoFar2.h5"
 
-        if not os.path.exists(resnet_model_path):
+        if os.path.exists(resnet_model_path):
             st.error(f"Model file not found: {resnet_model_path}")
             return
 
-        if not os.path.exists(inception_model_path):
+        if os.path.exists(inception_model_path):
             st.error(f"Model file not found: {inception_model_path}")
             return
         # Load classifiers
