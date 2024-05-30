@@ -79,30 +79,30 @@ def main():
 
             with prediction:
                 if st.button("Klasyfikuj"):
-                try:
-                    # Load classifiers
-                    st.write("Loading ResNet model...")
-                    modelResNet = tf.keras.models.load_model("pythonProject/ResNet_FT_BestSoFar.h5", compile=False)
-                    st.write("ResNet model loaded successfully.")
-
-                    st.write("Loading Inception model...")
-                    modelInception = tf.keras.models.load_model("pythonProject/Inception_FT_BestSoFar2.h5", compile=False)
-                    st.write("Inception model loaded successfully.")
-                except OSError as e:
-                    st.error(f"Error loading model: {e}")
-                    return
-
-                cols = st.columns(2)  # Add a small column in between for the vertical line
-
-                with cols[0]:
-                    # Classify image with ResNet
-                    predResNet = classify(image, modelResNet, (224, 224))
-                    display_predictions(predResNet, "ResNet")
-
-                with cols[1]:
-                    # Classify image with Inception
-                    predInception = classify(image, modelInception, (299, 299))
-                    display_predictions(predInception, "Inception")
+                    try:
+                        # Load classifiers
+                        st.write("Loading ResNet model...")
+                        modelResNet = tf.keras.models.load_model("pythonProject/ResNet_FT_BestSoFar.h5", compile=False)
+                        st.write("ResNet model loaded successfully.")
+    
+                        st.write("Loading Inception model...")
+                        modelInception = tf.keras.models.load_model("pythonProject/Inception_FT_BestSoFar2.h5", compile=False)
+                        st.write("Inception model loaded successfully.")
+                    except OSError as e:
+                        st.error(f"Error loading model: {e}")
+                        return
+    
+                    cols = st.columns(2)  # Add a small column in between for the vertical line
+    
+                    with cols[0]:
+                        # Classify image with ResNet
+                        predResNet = classify(image, modelResNet, (224, 224))
+                        display_predictions(predResNet, "ResNet")
+    
+                    with cols[1]:
+                        # Classify image with Inception
+                        predInception = classify(image, modelInception, (299, 299))
+                        display_predictions(predInception, "Inception")
 
 if __name__ == "__main__":
     main()
