@@ -7,6 +7,12 @@ import wikipedia
 # Define class names
 class_names = ["Curved spine", "Dead", "Edema", "Normal", "Unhatched", "Yolk deformation"]
 
+@st.cache_resource
+def load_models():
+    modelResNet = tf.keras.models.load_model("pythonProject/ResNet_FT_BestSoFar.h5", compile=False)
+    modelInception = tf.keras.models.load_model("pythonProject/Inception_FT_BestSoFar2.h5", compile=False)
+    return modelResNet, modelInception
+
 def classify(image, model, target_size):
     """
     This function takes an image, a model, and a target size and returns the predicted class and confidence
@@ -47,6 +53,7 @@ def main():
     st.set_page_config(page_title="Klasyfikacja wad rozwojowych Danio rerio")
     overview = st.container()
     prediction = st.container()
+    modelResNet, modelInception = load_models()
 
      # Wikipedia search in sidebar
     st.sidebar.title("Wyszukiwanie w Wikipedii")
@@ -54,6 +61,7 @@ def main():
 
     if search_query:
         try:
+            wikipedia.set_lang("pl")
             st.sidebar.write(wikipedia.summary(search_query))
         except wikipedia.exceptions.DisambiguationError as e:
             st.sidebar.error(f"Podane zapytanie jest dwuznaczne. Proszę wybrać bardziej konkretny termin.")
