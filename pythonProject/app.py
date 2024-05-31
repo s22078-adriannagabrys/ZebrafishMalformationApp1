@@ -84,10 +84,6 @@ def main():
             with prediction:
                 if st.button("Klasyfikuj"):
                     st.divider()
-
-                    # Load classifiers
-                    modelResNet = tf.keras.models.load_model("pythonProject/ResNet_FT_BestSoFar.h5", compile=False)
-                    modelInception = tf.keras.models.load_model("pythonProject/Inception_FT_BestSoFar2.h5", compile=False)
                     cols = st.columns(2)  # Add a small column in between for the vertical line
 
                     with cols[0]:
