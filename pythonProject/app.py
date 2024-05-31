@@ -71,7 +71,8 @@ def main():
     with overview:
         # Set title
         st.title('Klasyfikacja wad rozwojowych Danio rerio')
-
+        modelResNet = tf.keras.models.load_model("pythonProject/ResNet_FT_BestSoFar.h5", compile=False)
+        modelInception = tf.keras.models.load_model("pythonProject/Inception_FT_BestSoFar2.h5", compile=False)
         # Upload file with a label
         file = st.file_uploader('Wgraj zdjęcie larwy Danio rerio', type=['jpeg', 'jpg', 'png'])
 
